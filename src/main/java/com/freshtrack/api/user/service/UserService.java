@@ -1,5 +1,6 @@
 package com.freshtrack.api.user.service;
 
+import com.freshtrack.api.jwt.JwtService;
 import com.freshtrack.api.user.User;
 import com.freshtrack.api.user.UserRepository;
 import java.util.List;
@@ -8,9 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService implements IUserService {
     private final UserRepository userRepository;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -22,6 +25,13 @@ public class UserService implements IUserService {
     public User getUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + id));
+    }
+
+    @Override
+    public User getUserByEmail(String token) {
+        String email = jwtService.extractEmail(token);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found: " + email));
     }
 
     @Override

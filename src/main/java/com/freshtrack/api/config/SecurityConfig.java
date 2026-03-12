@@ -19,13 +19,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // public endpoints
-                        .anyRequest().authenticated()               // everything else requires auth
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // API doesn’t use sessions
-                )
-                .httpBasic(Customizer.withDefaults());
+                        .anyRequest().permitAll()
+                );
 
         return http.build();
     }
