@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class FreshtrackApiApplication {
 
 	public static void main(String[] args) {
-        System.out.println(System.getenv("SPRING_DATASOURCE_URL"));
 		SpringApplication.run(FreshtrackApiApplication.class, args);
 	}
 }
