@@ -1,24 +1,36 @@
 package com.freshtrack.api.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum ProductCategory {
-    FRUITS("Fruits"),
-    VEGETABLES("Vegetables"),
-    DAIRY("Dairy"),
-    MEAT("Meat"),
-    SEAFOOD("Seafood"),
-    BAKERY("Bakery"),
-    BEVERAGES("Beverages"),
-    SNACKS("Snacks"),
-    FROZEN_FOODS("Frozen Foods"),
-    OTHER("Other");
+    DAIRY("dairy"),
+    MEAT("meat"),
+    FRUIT("fruit"),
+    VEGETABLE("vegetable"),
+    BAKERY("bakery"),
+    BEVERAGE("beverage"),
+    FROZEN("frozen"),
+    OTHER("other");
 
-    private final String displayName;
+    private final String value;
 
-    ProductCategory(String displayName) {
-        this.displayName = displayName;
+    ProductCategory(String value) {
+        this.value = value;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    @JsonValue
+    public String getValue() {
+        return value;
+    }
+
+    @JsonCreator
+    public static ProductCategory fromValue(String value) {
+        for (ProductCategory category : values()) {
+            if (category.value.equalsIgnoreCase(value)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("Unknown category: " + value);
     }
 }
