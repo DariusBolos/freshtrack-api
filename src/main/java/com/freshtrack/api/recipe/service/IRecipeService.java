@@ -6,5 +6,5 @@ import java.util.List;
 public interface IRecipeService {
     List<RecipeResponse> getRecipes(String authToken);
     List<RecipeResponse> refreshRecipes(String authToken);
+    RecipeResponse generateSingleRecipe(String authToken, String productName);
 }
-
