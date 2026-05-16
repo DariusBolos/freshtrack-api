@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:16
+    container_name: freshtrack-postgres
+    environment:
+      POSTGRES_DB: freshtrack
+      POSTGRES_USER: freshtrack
+      POSTGRES_PASSWORD: freshtrack
+    ports:
+      - "5432:5432"
+    volumes:
+      - freshtrack-postgres:/var/lib/postgresql/data
+
+volumes:
+  freshtrack-postgres:
+

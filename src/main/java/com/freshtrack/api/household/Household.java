@@ -1,6 +1,6 @@
-package com.freshtrack.api.user;
+package com.freshtrack.api.household;
 
-import com.freshtrack.api.household.Household;
+import com.freshtrack.api.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,29 +15,24 @@ import lombok.ToString;
 
 @Data
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "households")
+public class Household {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "household_id")
+    @JoinColumn(name = "owner_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    private Household household;
+    private User owner;
 
-    public User() {}
+    public Household() {}
 
-    public User(Long id, String email, String password, String firstName, String lastName) {
+    public Household(Long id, String name, User owner) {
         this.id = id;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
+        this.owner = owner;
     }
 }
