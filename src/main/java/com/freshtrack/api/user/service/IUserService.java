@@ -12,4 +12,7 @@ public interface IUserService {
     List<User> getAllUsers();
     User updateUser(Long id, User user);
     void deleteUser(Long id);
+    void changePassword(String token, String currentPassword, String newPassword);
+    User updateUserNames(String token, String firstName, String lastName);
+    void deleteUserByToken(String token);
 }

@@ -4,16 +4,21 @@ import com.freshtrack.api.jwt.JwtService;
 import com.freshtrack.api.user.User;
 import com.freshtrack.api.user.UserRepository;
 import java.util.List;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, JwtService jwtService) {
+    public UserService(UserRepository userRepository,
+                       JwtService jwtService,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -56,5 +61,29 @@ public class UserService implements IUserService {
             throw new IllegalArgumentException("User not found: " + id);
         }
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public void changePassword(String token, String currentPassword, String newPassword) {
+        User user = getUserByEmail(token);
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new IllegalArgumentException("Invalid current password");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    @Override
+    public User updateUserNames(String token, String firstName, String lastName) {
+        User user = getUserByEmail(token);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        return userRepository.save(user);
+    }
+
+    @Override
+    public void deleteUserByToken(String token) {
+        User user = getUserByEmail(token);
+        userRepository.deleteById(user.getId());
     }
 }
